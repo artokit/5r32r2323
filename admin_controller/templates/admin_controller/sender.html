@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Рассылка{% endblock %}
+{% block content %}
+<script type="text/javascript">
+function loadPhoto(e) {
+    let reader = new FileReader();
+    reader.readAsDataURL(e.files[0]);
+    reader.onload = () => {
+        document.querySelector('.image-preview').src = reader.result;
+        console.log(reader.result);
+        $('.' + 'photo__input').addClass('hidden')
+    }
+}
+</script>
+
+<img class='image-preview'>
+<form class="sender" method="post" action="." enctype="multipart/form-data">
+	{% csrf_token %}
+	<div class="sender__photo sender__block">
+		<div class="photo__input">
+			<div class='photo-wrap'>
+					<label class="photo-label" for="{{ form.photo.id_for_label }}">
+					{{ form.photo }}
+					<i class="fa-solid fa-download"></i>
+					<span>Загрузить фото</span>
+			    </label>
+			</div>
+		</div>
+	</div>
+
+	<div class="sender__text sender__block">
+		<div class="text__input">
+			{{ form.text }}
+		</div>
+	</div>
+	<button class='btn-submit' type="submit">Отправить всем</button>
+</form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript">
+	$(function () {
+    var dropZoneId = "photo__input";
+    var mouseOverClass = "mouse-over";
+
+    var dropZone = $("." + dropZoneId);
+    var ooleft = dropZone.offset().left;
+    var ooright = dropZone.outerWidth() + ooleft;
+    var ootop = dropZone.offset().top;
+    var oobottom = dropZone.outerHeight() + ootop;
+    var inputFile = dropZone.find("input");
+    document.querySelector('.' + dropZoneId).addEventListener("dragover", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.addClass(mouseOverClass);
+        var x = e.pageX;
+        var y = e.pageY;
+
+    }, true);
+
+    document.querySelector('.' + dropZoneId).addEventListener("dragleave", function (e) {
+        	$("." + dropZoneId).removeClass(mouseOverClass)
+    }, true);
+
+    document.querySelector('.' + dropZoneId).addEventListener("drop", function (e) {
+    	e.preventDefault();
+    	document.querySelector('.message-photo').files = e.dataTransfer.files;
+    	let reader = new FileReader();
+        reader.readAsDataURL(e.dataTransfer.files[0]);
+        reader.onload = () => {
+            document.querySelector('.image-preview').src = reader.result;
+            $("." + dropZoneId).removeClass(mouseOverClass);
+            $('.' + dropZoneId).addClass('hidden')
+        };
+    }, true);
+
+})
+</script>
+{% endblock %}

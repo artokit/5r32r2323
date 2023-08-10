@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %}Доброе время суток, {{ request.user.username }}{% endblock %}
+
+{% block content %}
+<div class="start-buttons">
+	<a href="/admin">Админка</a>
+	<a href="/sender">Рассылка</a>
+</div>
+{% endblock %}
